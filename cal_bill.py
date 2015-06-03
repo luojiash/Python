@@ -3,13 +3,13 @@
 import re
 import operator
 
-def f1():
+def cal_toshl_bill(path):
     p = r'"\d{4}-\d{2}-\d{2}","(.+?)","(\d+\.\d{2})"'
     reg = re.compile(p)
 
     sum = 0
     ex_map = {}
-    f = open('h:/baiduyundownload/data.txt')
+    f = open(path)
     for line in f:
         m = reg.match(line)
         if m:
@@ -30,21 +30,23 @@ def f1():
     for tag, cost in ex_sorted:
         print tag, cost
 
-def f2():
+def cal_wx_bill(path):
     p = r'([+-]) (\d+\.\d{2})'
     reg = re.compile(p)
-    sum = 0
-    f = open('h:/baiduyundownload/data.txt')
+    income = 0
+    payout = 0
+    f = open(path)
     for line in f:
         m = reg.search(line)
         if m:
             if m.group(1) == '+':
-                sum += float(m.group(2))
+                income += float(m.group(2))
             elif m.group(1) == '-':
-                sum -= float(m.group(2))
+                payout -= float(m.group(2))
             else:
                 print 'unknown operator: %s' % line
     f.close()
-    print sum
+    print 'income:%s; payout:%s; sum:%s' % (income, payout, income+payout)
 
-f2()
+#cal_wx_bill('e:/weixin.txt')
+cal_toshl_bill('d:/tmp/data.txt')
