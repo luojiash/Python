@@ -21,10 +21,7 @@ class DownloadThread(threading.Thread):
 
             path = urltp[0]#storage path
             url = urltp[1]#img addr
-            try:
-                name = url[url.rindex('/')+1:]
-            except:
-                stdout.write('\n*%s*' % url)
+            name = url[url.rindex('/')+1:]
             full_path = path + '/' + name
             if os.path.isfile(full_path): pass
                 #stdout.write('%s exists\n' %name)
@@ -38,7 +35,7 @@ class DownloadThread(threading.Thread):
                     f.close()
                     #stdout.write('%s download succeed\n' %full_path)
                 except urllib2.HTTPError, e:
-                    stdout.write('\n*img %s' % e)
+                    stdout.write('\n*%s %s' % (e, urltp))
                     if not e.code == 404:
                         self.queue.put(urltp)
                 except Exception, e:

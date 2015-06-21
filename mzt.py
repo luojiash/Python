@@ -9,43 +9,10 @@ import socket
 import traceback
 import threading
 
-class DownloadThread(threading.Thread):
-    '''下载单个文件的线程，守护线程，主进程结束后退出'''
-    def __init__(self, queue):
-        threading.Thread.__init__(self)
-        self.queue = queue
-        self.setDaemon(True)
-
-    def run(self):
-        while True:
-            urltp = self.queue.get()
-            stdout.write('%s' % self.queue.unfinished_tasks)
-
-            path = urltp[0]#storage path
-            url = urltp[1]#img addr
-            name = url[url.rindex('/')+1:]
-            full_path = path + '/' + name
-            if os.path.isfile(full_path): pass
-                #stdout.write('%s exists\n' %name)
-            else:
-                try:
-                    resp = urllib2.urlopen(url, timeout=60)
-                    data = resp.read()
-                    resp.close()
-                    f = open(full_path, 'wb')
-                    f.write(data)
-                    f.close()
-                    #stdout.write('%s download succeed\n' %full_path)
-                except urllib2.HTTPError, e:
-                    stdout.write('\n*img %s' % e)
-                    if not e.code == 404:
-                        self.queue.put(urltp)
-                except Exception, e:
-                    stdout.write('\n*img2 %s' % e)
-                    self.queue.put(urltp)
-            self.queue.task_done()
-
 class mzitu(threading.Thread):
+    headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'}
+    img_pre = 'http://img.dofay.com'
+
     def __init__(self, queue, urls, path):
         threading.Thread.__init__(self)
         self.queue = queue
@@ -71,16 +38,16 @@ class mzitu(threading.Thread):
         return True
 
     def run(self):
-        img_pt = re.compile(
-            r'http://pic.dofay.com/\d{4}/\d{2}/[\w-]+.(jpe?g|png)')
-        img_pt_ord = re.compile(
-            r'http://pic.dofay.com/\d{4}/\d{2}/[\w-]+01.(jpe?g|png)')
+        img_pt = re.compile(self.img_pre + r'/\d{4}/\d{2}/[\w-]+.(jpe?g|png)')
+        img_pt_ord = re.compile(self.img_pre +
+                                r'/\d{4}/\d{2}/[\w-]+01.(jpe?g|png)')
 
         while self.urls:
             url = self.urls.pop(0)
             stdout.write('\n----%s start' % url)
             try:
-                resp = urllib2.urlopen(url, timeout=30)
+                req = urllib2.Request(url, headers=self.headers)
+                resp = urllib2.urlopen(req, timeout=30)
                 html = resp.read()
                 resp.close()
             except Exception, e:
@@ -104,7 +71,7 @@ class mzitu(threading.Thread):
             if m:
                 imgi = m.group().replace('01.', '{:02d}.')
                 for i in range(1, index+1):
-                    self.queue.put((path, imgi.format(i)))
+                    self.queue.put((path, imgi.format(i)), True)
                 continue
 
             urlis = []
@@ -113,7 +80,8 @@ class mzitu(threading.Thread):
             while urlis:
                 urli = urlis.pop(0)
                 try:
-                    resp = urllib2.urlopen(urli, timeout=30)
+                    req = urllib2.Request(urli, headers=self.headers)
+                    resp = urllib2.urlopen(req, timeout=30)
                     html = resp.read()
                     resp.close()
                 except Exception, e:
@@ -122,16 +90,18 @@ class mzitu(threading.Thread):
                     continue
                 m = img_pt.search(html)
                 if m:
-                    self.queue.put((path, m.group()))
+                    self.queue.put((path, m.group()), True)
                 else:
                     print "*find img fail: %s" %urli
 
 def getLink(url):
     '''从一个页面获取页面链接'''
-##    resp = urllib2.urlopen(url)
+##    req = urllib2.Request(url, headers=mzitu.headers)
+##    resp = urllib2.urlopen(req)
 ##    html = resp.read()
+##    resp.close()
     html = open(u'E:/百度云同步盘/data1.txt').read()
-    reg = re.compile(r'href="(http://m.mzitu.com/\d+)"')
+    reg = re.compile(r'href="(http://www\.fmeizi\.com/\d+)"')
 
     index = 0
     f = open('D:/tmp/data.txt', 'wb')
@@ -150,7 +120,7 @@ def main():
     for i in range(urllist.count('')):
         urllist.remove('')
 
-    queue = Queue()
+    queue = Queue(100)
     mzt = mzitu(queue, urllist, 'D:/tmp')
     mzt.start()
 
