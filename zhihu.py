@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
     login_url = 'http://www.zhihu.com/login/email'
     post_dict = {'_xsrf':_xsrf, 'email': 'bibibi@mailinator.com',
-                 'password': '1234abcd', 'rememberme': 'true'}
+                 'password': '1234abcd', 'remember_me': 'true'}
     post_data = urllib.urlencode(post_dict)
     rsp = opener.open(login_url, post_data)
     print 'login status: %s' % rsp.getcode()
@@ -76,6 +76,5 @@ if __name__ == '__main__':
 
     tdata = data.decode('unicode-escape')
     print tdata
-    fileutil.save('d:/tmp/test.html', tdata.encode('utf8'))
     print json.dumps(json.loads(data),ensure_ascii=False)
     
