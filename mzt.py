@@ -9,6 +9,8 @@ import socket
 import traceback
 import threading
 
+from download import DownloadThread
+
 class mzitu(threading.Thread):
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'}
     img_pre = 'http://img.dofay.com'
@@ -115,7 +117,7 @@ def getLink(url):
     f.close()
 
 def main():
-    s ='''http://m.mzitu.com/35719'''
+    s ='''http://m.mzitu.com/44836'''
     urllist = s.split('\n')
     for i in range(urllist.count('')):
         urllist.remove('')

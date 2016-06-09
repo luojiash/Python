@@ -1,6 +1,6 @@
 #coding: utf8
 
-import re
+import re, sys
 import operator
 
 def cal_toshl_bill(path):
@@ -23,7 +23,7 @@ def cal_toshl_bill(path):
                     ex_map[tag] = cost
             #print m.group(1).decode('utf8'), m.group(2)
         else:
-            print 'no match: %s' % line
+            sys.stderr.write('no match: %s' % line)
     f.close()
     print sum
     ex_sorted = sorted(ex_map.items(), key=operator.itemgetter(1), reverse=True)
@@ -48,5 +48,5 @@ def cal_wx_bill(path):
     f.close()
     print 'income:%s; payout:%s; sum:%s' % (income, payout, income+payout)
 
-#cal_wx_bill('e:/weixin.txt')
-cal_toshl_bill('d:/tmp/data.txt')
+if __name__ == '__main__':
+    cal_toshl_bill(r'D:\tmp\url_list.txt')
