@@ -1,7 +1,5 @@
 #coding:utf-8
 
-import sys
-
 ''' 倒排索引
 '''
 def invert(file):
@@ -12,9 +10,9 @@ def invert(file):
             result[right].append(left)
         else:
             result[right] = [left]
-    return result;
+    return result
 
-file = open('G:/py/inverted_list.txt', 'r')
+file = open('inverted_list.txt', 'r')
 result = invert(file)
 for (right, lefts) in result.items():
     print(len(lefts), right, lefts)

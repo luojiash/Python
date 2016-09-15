@@ -1,12 +1,24 @@
 #encoding: utf-8
 
-import urllib, urllib2
-import cookielib
-import re, sys
-import gzip, StringIO, json
-import traceback
+# <<<<<<< HEAD
+# import urllib, urllib2
+# import cookielib
+# import re, sys
+# import gzip, StringIO, json
+# import traceback
 
-import fileutil
+# import fileutil
+# =======
+import StringIO
+import cookielib
+import gzip
+import json
+import re
+import sys
+import urllib
+import urllib2
+
+# >>>>>>> xxx
 
 class RedirectHandler(urllib2.HTTPRedirectHandler):
     def http_error_301(self, req, fp, code, msg, headers):

@@ -1,12 +1,22 @@
 #coding: utf-8
 
-import urllib2, time, os, re
-from urlparse import urlparse
-from bs4 import BeautifulSoup
-from abc import ABCMeta, abstractmethod
-from Queue import Queue
+# <<<<<<< HEAD
+# import urllib2, time, os, re
+# from urlparse import urlparse
+# from bs4 import BeautifulSoup
+# from abc import ABCMeta, abstractmethod
+# from Queue import Queue
 
-from download import DownloadThread
+# from download import DownloadThread
+# =======
+import time
+import tkMessageBox
+import urllib2
+from abc import ABCMeta, abstractmethod
+
+from bs4 import BeautifulSoup
+
+# >>>>>>> xxx
 
 class A:
     __metaclass__ = ABCMeta
@@ -38,29 +48,37 @@ def visit(url, times):
         except Exception, e:
             time.sleep(0.5)
 
-def download():
-    queue = Queue()
+# <<<<<<< HEAD
+# def download():
+    # queue = Queue()
     
-    path = 'D:/tmp/www.5442.com/15143'
-    if not os.path.exists(path):
-        os.makedirs(path)
-    p = 'http://image.5442.com/2015/0213/10/{:02d}.jpg'
-    count = 73
-    for i in range(1, count+1):
-        queue.put((path, p.format(i)))
+    # path = 'D:/tmp/www.5442.com/15143'
+    # if not os.path.exists(path):
+        # os.makedirs(path)
+    # p = 'http://image.5442.com/2015/0213/10/{:02d}.jpg'
+    # count = 73
+    # for i in range(1, count+1):
+        # queue.put((path, p.format(i)))
 
-    nthreads = 20
-    for i in range(nthreads):
-        t = DownloadThread(queue)
-        t.start()
+    # nthreads = 20
+    # for i in range(nthreads):
+        # t = DownloadThread(queue)
+        # t.start()
 
-    queue.join()
+    # queue.join()
         
 
+# if __name__ == '__main__':
+# ##    f()
+# ##    a = urlparse('http://www.zngirls.com/girl/19705/')
+# ##    print a
+# ##    download()
+    # url = 'http://m.mzitu.com/44836'
+    # urllib2.urlopen(url)
+# =======
+def box():
+    tkMessageBox.showinfo(message='hello')
+
 if __name__ == '__main__':
-##    f()
-##    a = urlparse('http://www.zngirls.com/girl/19705/')
-##    print a
-##    download()
-    url = 'http://m.mzitu.com/44836'
-    urllib2.urlopen(url)
+    box()
+# >>>>>>> xxx
